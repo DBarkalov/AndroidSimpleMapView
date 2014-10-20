@@ -19,12 +19,14 @@ import java.net.URL;
  */
 public class TileLoadTask  extends AsyncTask<TileData, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
+    private final TileUrl tileUrl;
     private TileData tileData;
     private ImageCache imageMemoryCache;
 
-    public TileLoadTask(ImageView imageView, ImageCache imageMemoryCache) {
+    public TileLoadTask(ImageView imageView, ImageCache imageMemoryCache, TileUrl tileUrl) {
         this.imageViewReference = new WeakReference<ImageView>(imageView);
         this.imageMemoryCache = imageMemoryCache;
+        this.tileUrl = tileUrl;
     }
 
     @Override
@@ -46,8 +48,8 @@ public class TileLoadTask  extends AsyncTask<TileData, Void, Bitmap> {
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
             return myBitmap;
         } catch (IOException e) {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -75,11 +77,16 @@ public class TileLoadTask  extends AsyncTask<TileData, Void, Bitmap> {
         return null;
     }
 
+
     private String getUrl(TileData tileData) {
-        return "http://b.tile.opencyclemap.org/cycle/16/" + tileData.getX() + "/" + tileData.getY() + ".png";
+        return tileUrl.getUrl(tileData.getX(), tileData.getY());
     }
 
     public TileData getTile() {
         return tileData;
+    }
+
+    public static interface TileUrl {
+        String getUrl(int x, int y);
     }
 }

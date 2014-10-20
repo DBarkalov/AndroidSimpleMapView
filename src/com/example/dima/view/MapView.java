@@ -27,10 +27,8 @@ public class MapView extends ViewGroup {
     private Bounds mBounds;
     private Deque<View> mRecycledViews;
     TileProvider mTileProvider;
-
-    private Point startCoord = new Point(33198,22539);
-    private int mTileSize = 256;
-
+    private Point startCoord;
+    private int mTileSize;
 
     public MapView(Context context) {
         super(context);
@@ -65,6 +63,11 @@ public class MapView extends ViewGroup {
             }
         });
         mRecycledViews = new ArrayDeque<View>();
+    }
+
+    public void setStartCoord(Point point, int tileSize){
+        startCoord = point;
+        mTileSize = tileSize;
     }
 
     private boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
